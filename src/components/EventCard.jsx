@@ -27,9 +27,9 @@ function EventCard({ event }) {
           const userRatingResponse = await fetch(`${API_URL}/api/ratings/${event.id}/${user.uid}`);
           if (userRatingResponse.ok) {
             const data = await userRatingResponse.json();
-            setUserRating(data.rating || 0); // Встановлюємо 0, якщо оцінки немає
+            setUserRating(data.rating || 0);
           } else if (userRatingResponse.status === 404) {
-            setUserRating(0); // Оцінки користувача ще немає
+            setUserRating(0);
           } else {
             console.error("Error fetching user rating:", userRatingResponse.statusText);
             setUserRating(0);
@@ -39,17 +39,17 @@ function EventCard({ event }) {
           setUserRating(0);
         }
       } else {
-        setUserRating(0); // Скидаємо, якщо користувач не увійшов
+        setUserRating(0);
       }
 
       // Отримання всіх оцінок для розрахунку середньої (з пагінацією)
       try {
-        const ratingsResponse = await fetch(`${API_URL}/api/ratings/${event.id}?page=${currentPage}&limit=10`); // Запит на першу сторінку з 10 відгуками
+        const ratingsResponse = await fetch(`${API_URL}/api/ratings/${event.id}?page=${currentPage}&limit=10`);
         if (ratingsResponse.ok) {
           const data = await ratingsResponse.json();
           setAverageRating(data.averageRating || 0);
           setNumberOfRatings(data.numberOfRatings || 0);
-          setDetailedRatings(data.ratings); // Зберігаємо відгуки для відображення
+          setDetailedRatings(data.ratings);
           setTotalPages(data.totalPages || 1);
           setCurrentPage(data.currentPage || 1);
         } else {
@@ -66,7 +66,7 @@ function EventCard({ event }) {
 
     fetchEventRatings();
     // Додаємо event.id та user.uid у залежності, щоб оновлювати дані, коли вони змінюються
-  }, [event.id, user, currentPage, userRating]); // userRating додано, щоб оновлювати середню оцінку після кліку на зірку
+  }, [event.id, user, currentPage, userRating, API_URL]);
 
   const handleBooking = async () => {
     const qty = parseInt(quantity, 10);

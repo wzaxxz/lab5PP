@@ -25,12 +25,12 @@ app.use('/api/ratings', ratingsRouter);
 // Обслуговування статичних файлів React-додатка
 // Після того, як ви зберете (build) ваш React-додаток, статичні файли будуть у папці `build`
 // У продакшені, Express буде обслуговувати ці файли.
-app.use(express.static(path.join(__dirname, '../build'))); // Шлях до вашої React build папки
+//app.use(express.static(path.join(__dirname, '../build'))); // Шлях до вашої React build папки
 
 // Для всіх інших запитів, які не є API, надсилаємо файл index.html React-додатка
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../build', 'index.html'));
-});
+//app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../build', 'index.html'));
+//});
 
 
 // Запуск сервера

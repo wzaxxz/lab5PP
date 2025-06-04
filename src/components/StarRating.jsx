@@ -19,7 +19,6 @@ function StarRating({ eventId, userId, currentRating, onRatingChange }) {
         setRating(newRating);
 
         try {
-            // Відправляємо оцінку на ваш Node.js сервер
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/ratings`, {
                 method: 'POST',
                 headers: {
@@ -32,19 +31,15 @@ function StarRating({ eventId, userId, currentRating, onRatingChange }) {
 
             if (response.ok) {
                 console.log(data.message);
-                // Після успішного збереження/оновлення на сервері,
-                // повідомляємо батьківський компонент про зміну
                 onRatingChange(newRating);
             } else {
                 alert(data.message || "Сталася помилка при збереженні оцінки. Спробуйте ще раз.");
                 console.error("Помилка при збереженні оцінки:", data.message);
-                // У разі помилки повертаємо попередню оцінку
                 setRating(currentRating || 0);
             }
         } catch (error) {
             console.error("Помилка мережі або сервера:", error);
             alert("Сталася помилка зв'язку з сервером. Спробуйте ще раз.");
-            // У разі помилки повертаємо попередню оцінку
             setRating(currentRating || 0);
         }
     };

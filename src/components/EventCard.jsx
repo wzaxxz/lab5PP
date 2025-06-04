@@ -1,7 +1,7 @@
 // src/components/EventCard.jsx
 import React, { useState, useEffect } from "react";
-import { db, auth } from "../firebaseConfig"; // Залишаємо для бронювань
-import { collection, addDoc } from "firebase/firestore"; // Залишаємо для бронювань
+import { db, auth } from "../firebaseConfig";
+import { collection, addDoc } from "firebase/firestore";
 import StarRating from "./StarRating";
 
 function EventCard({ event }) {
@@ -10,18 +10,17 @@ function EventCard({ event }) {
   const [userRating, setUserRating] = useState(0);
   const [averageRating, setAverageRating] = useState(0);
   const [numberOfRatings, setNumberOfRatings] = useState(0);
-  const [showAllRatings, setShowAllRatings] = useState(false); // Для пагінації (розгортання всіх відгуків)
+  const [showAllRatings, setShowAllRatings] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [detailedRatings, setDetailedRatings] = useState([]); // Для пагінованих відгуків
+  const [detailedRatings, setDetailedRatings] = useState([]);
 
   const user = auth.currentUser;
 
-  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000"; // URL вашого бекенду
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000"; 
 
   useEffect(() => {
     const fetchEventRatings = async () => {
-      // Отримання оцінки поточного користувача
       if (user) {
         try {
           const userRatingResponse = await fetch(`${API_URL}/api/ratings/${event.id}/${user.uid}`);
@@ -42,7 +41,6 @@ function EventCard({ event }) {
         setUserRating(0);
       }
 
-      // Отримання всіх оцінок для розрахунку середньої (з пагінацією)
       try {
         const ratingsResponse = await fetch(`${API_URL}/api/ratings/${event.id}?page=${currentPage}&limit=10`);
         if (ratingsResponse.ok) {
@@ -53,19 +51,18 @@ function EventCard({ event }) {
           setTotalPages(data.totalPages || 1);
           setCurrentPage(data.currentPage || 1);
         } else {
-          console.error("Error fetching all ratings:", ratingsResponse.statusText);
+          console.error("Помилка при визначення усіх рейтингів:", ratingsResponse.statusText);
           setAverageRating(0);
           setNumberOfRatings(0);
         }
       } catch (error) {
-        console.error("Network error fetching all ratings:", error);
+        console.error("Мережева помилка при визначенні рейтингів:", error);
         setAverageRating(0);
         setNumberOfRatings(0);
       }
     };
 
     fetchEventRatings();
-    // Додаємо event.id та user.uid у залежності, щоб оновлювати дані, коли вони змінюються
   }, [event.id, user, currentPage, userRating, API_URL]);
 
   const handleBooking = async () => {
@@ -103,8 +100,7 @@ function EventCard({ event }) {
   };
 
   const handleRatingChange = (newRating) => {
-    setUserRating(newRating); // Оновлюємо локальний стан оцінки користувача
-    // Trigger useEffect by changing userRating to re-fetch average and other ratings
+    setUserRating(newRating);
   };
 
   const handleNextPage = () => {

@@ -25,7 +25,7 @@ const RatingSchema = new mongoose.Schema({
     }
 });
 
-// Додаємо індекс, щоб уникнути дублювання оцінок від одного користувача для однієї події
+
 RatingSchema.index({ eventId: 1, userId: 1 }, { unique: true });
 
 module.exports = mongoose.model('Rating', RatingSchema);
